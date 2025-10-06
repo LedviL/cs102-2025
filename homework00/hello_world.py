@@ -7,5 +7,5 @@ def text():
     """
     another docstring
     """
-    message = "Hello, world"
+    message = "message"
     return message
