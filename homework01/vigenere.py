@@ -10,6 +10,7 @@ def encrypt_vigenere(plaintext: str, keyword: str) -> str:
     """
     ciphertext = ""
     import caesar
+
     j = 0
     for i in range(len(plaintext)):
         char = plaintext[i]
@@ -23,7 +24,7 @@ def encrypt_vigenere(plaintext: str, keyword: str) -> str:
             key = key.upper()
         elif char.islower() and key.isupper():
             key = key.lower()
-        shift = ord(key) - ord('A' if char.isupper() else 'a')
+        shift = ord(key) - ord("A" if char.isupper() else "a")
         ciphertext += caesar.encrypt_caesar(char, shift)
         j += 1
 
@@ -42,6 +43,7 @@ def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
     """
     plaintext = ""
     import caesar
+
     j = 0
     for i in range(len(ciphertext)):
         char = ciphertext[i]
@@ -55,7 +57,7 @@ def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
             key = key.upper()
         elif char.islower() and key.isupper():
             key = key.lower()
-        shift = ord(key) - ord('A' if char.isupper() else 'a')
+        shift = ord(key) - ord("A" if char.isupper() else "a")
         plaintext += caesar.decrypt_caesar(char, shift)
         j += 1
     return plaintext
