@@ -16,9 +16,8 @@ def encrypt_vigenere(plaintext: str, keyword: str) -> str:
         char = plaintext[i]
         if not char.isalpha():
             ciphertext += char
+            j = (j+1) % len(keyword)
             continue
-        if j == len(keyword):
-            j = 0
         key = keyword[j]
         if char.isupper() and key.islower():
             key = key.upper()
@@ -26,7 +25,7 @@ def encrypt_vigenere(plaintext: str, keyword: str) -> str:
             key = key.lower()
         shift = ord(key) - ord("A" if char.isupper() else "a")
         ciphertext += caesar.encrypt_caesar(char, shift)
-        j += 1
+        j = (j+1) % len(keyword)
 
     return ciphertext
 
@@ -49,9 +48,8 @@ def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
         char = ciphertext[i]
         if not char.isalpha():
             plaintext += char
+            j = (j + 1) % len(keyword)
             continue
-        if j == len(keyword):
-            j = 0
         key = keyword[j]
         if char.isupper() and key.islower():
             key = key.upper()
@@ -59,5 +57,5 @@ def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
             key = key.lower()
         shift = ord(key) - ord("A" if char.isupper() else "a")
         plaintext += caesar.decrypt_caesar(char, shift)
-        j += 1
+        j = (j + 1) % len(keyword)
     return plaintext
