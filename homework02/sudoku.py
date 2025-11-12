@@ -81,7 +81,17 @@ def get_block(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.List[s
     >>> get_block(grid, (8, 8))
     ['2', '8', '.', '.', '.', '5', '.', '7', '9']
     """
-    pass
+    row, col = pos
+    square_size = int(len(grid) ** 0.5)
+    square_start_r = row // square_size * square_size
+    square_end_r = square_start_r + square_size
+    square_start_c = col // square_size * square_size
+    square_end_c = square_start_c + square_size
+    block = []
+    for r in range(square_start_r, square_end_r):
+        for c in range(square_start_c, square_end_c):
+            block.append(grid[r][c])
+    return block
 
 
 def find_empty_positions(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.Tuple[int, int]]:
