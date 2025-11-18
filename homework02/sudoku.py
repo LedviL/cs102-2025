@@ -1,6 +1,6 @@
 import pathlib
 import typing as tp
-from random import shuffle
+from random import randint
 
 T = tp.TypeVar("T")
 
@@ -24,7 +24,12 @@ def display(grid: tp.List[tp.List[str]]) -> None:
     width = 2
     line = "+".join(["-" * (width * 3)] * 3)
     for row in range(9):
-        print("".join(grid[row][col].center(width) + ("|" if str(col) in "25" else "") for col in range(9)))
+        print(
+            "".join(
+                grid[row][col].center(width) + ("|" if str(col) in "25" else "")
+                for col in range(9)
+            )
+        )
         if str(row) in "25":
             print(line)
     print()
@@ -38,8 +43,7 @@ def group(values: tp.List[T], n: int) -> tp.List[tp.List[T]]:
     >>> group([1,2,3,4,5,6,7,8,9], 3)
     [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
     """
-    grouped_list = [values[start : start + n] for start in range(0, len(values), n)]
-    return grouped_list
+    return [values[start : start + n] for start in range(0, len(values), n)]
 
 
 def get_row(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.List[str]:
@@ -82,14 +86,17 @@ def get_block(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.List[s
     square_end_r = square_start_r + square_size
     square_start_c = col // square_size * square_size
     square_end_c = square_start_c + square_size
-    block = []
-    for r in range(square_start_r, square_end_r):
-        for c in range(square_start_c, square_end_c):
-            block.append(grid[r][c])
+    block = [
+        grid[r][c]
+        for r in range(square_start_r, square_end_r)
+        for c in range(square_start_c, square_end_c)
+    ]
     return block
 
 
-def find_empty_positions(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.Tuple[int, int]]:
+def find_empty_positions(
+    grid: tp.List[tp.List[str]],
+) -> tp.Optional[tp.Tuple[int, int]]:
     """Найти первую свободную позицию в пазле
     >>> find_empty_positions([['1', '2', '.'], ['4', '5', '6'], ['7', '8', '9']])
     (0, 2)
@@ -105,7 +112,9 @@ def find_empty_positions(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.Tuple[in
     return None
 
 
-def find_possible_values(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.Set[str]:
+def find_possible_values(
+    grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]
+) -> tp.Set[str]:
     """Вернуть множество возможных значения для указанной позиции
     >>> grid = read_sudoku('puzzle1.txt')
     >>> values = find_possible_values(grid, (0,2))
@@ -118,7 +127,7 @@ def find_possible_values(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -
     row = get_row(grid, pos)
     col = get_col(grid, pos)
     block = get_block(grid, pos)
-    possible_values = {chr(ord("1") + i) for i in range(9)} - set(row) - set(col) - set(block) - {"."}
+    possible_values = set("123456789") - set(row) - set(col) - set(block) - {"."}
     return possible_values
 
 
@@ -144,7 +153,7 @@ def solve(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.List[tp.List[str]]]:
         grid[r][c] = val
         res = solve(grid)
         if res:
-            break
+            return res
         grid[r][c] = "."
     return res
 
@@ -152,8 +161,12 @@ def solve(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.List[tp.List[str]]]:
 def check_solution(solution: tp.List[tp.List[str]]) -> bool:
     """Если решение solution верно, то вернуть True, в противном случае False"""
     # TODO: Add doctests with bad puzzles
-    if solution is None:
-        return None
+    if (
+        solution is None
+        or (len(solution) != len(solution[0]))
+        or (len(solution) != (len(solution) ** 0.5) ** 2)
+    ):
+        return False
     for i in range(len(solution)):
         row = get_row(solution, (i, i))
         if "." in row or len(row) != len(set(row)):
@@ -192,9 +205,8 @@ def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
     >>> check_solution(solution)
     True
     """
-    from random import randint
 
-    N = N if N <= 81 else 81
+    N = N if 0 <= N <= 81 else 81
     new_grid = [
         ["5", "3", "4", "6", "7", "8", "9", "1", "2"],
         ["6", "7", "2", "1", "9", "5", "3", "4", "8"],
