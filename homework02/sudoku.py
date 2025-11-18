@@ -24,12 +24,7 @@ def display(grid: tp.List[tp.List[str]]) -> None:
     width = 2
     line = "+".join(["-" * (width * 3)] * 3)
     for row in range(9):
-        print(
-            "".join(
-                grid[row][col].center(width) + ("|" if str(col) in "25" else "")
-                for col in range(9)
-            )
-        )
+        print("".join(grid[row][col].center(width) + ("|" if str(col) in "25" else "") for col in range(9)))
         if str(row) in "25":
             print(line)
     print()
@@ -86,11 +81,7 @@ def get_block(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.List[s
     square_end_r = square_start_r + square_size
     square_start_c = col // square_size * square_size
     square_end_c = square_start_c + square_size
-    block = [
-        grid[r][c]
-        for r in range(square_start_r, square_end_r)
-        for c in range(square_start_c, square_end_c)
-    ]
+    block = [grid[r][c] for r in range(square_start_r, square_end_r) for c in range(square_start_c, square_end_c)]
     return block
 
 
@@ -112,9 +103,7 @@ def find_empty_positions(
     return None
 
 
-def find_possible_values(
-    grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]
-) -> tp.Set[str]:
+def find_possible_values(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.Set[str]:
     """Вернуть множество возможных значения для указанной позиции
     >>> grid = read_sudoku('puzzle1.txt')
     >>> values = find_possible_values(grid, (0,2))
@@ -161,11 +150,7 @@ def solve(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.List[tp.List[str]]]:
 def check_solution(solution: tp.List[tp.List[str]]) -> bool:
     """Если решение solution верно, то вернуть True, в противном случае False"""
     # TODO: Add doctests with bad puzzles
-    if (
-        solution is None
-        or (len(solution) != len(solution[0]))
-        or (len(solution) != (len(solution) ** 0.5) ** 2)
-    ):
+    if solution is None or (len(solution) != len(solution[0])) or (len(solution) != (len(solution) ** 0.5) ** 2):
         return False
     for i in range(len(solution)):
         row = get_row(solution, (i, i))
