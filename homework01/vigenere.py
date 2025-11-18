@@ -11,7 +11,6 @@ def encrypt_vigenere(plaintext: str, keyword: str) -> str:
     ciphertext = ""
     import caesar
 
-
     keyword_char_index = 0
     for i, char in enumerate(plaintext):
         if not char.isalpha():
