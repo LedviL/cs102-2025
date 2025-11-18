@@ -1,10 +1,8 @@
 def decrypt_scytale(plaintext, n):
     """decrypts scytale cypher"""
-    rows, cols = n, len(plaintext) // n
-    matrix = [[""] * cols for _ in range(rows)]
-    c = -1
-    for i, char in enumerate(plaintext):
-        if i % rows == 0:
-            c += 1
-        matrix[i % rows][c] = char
-    return "".join(["".join(s) for s in matrix])
+    text_size = len(plaintext)
+    decrypted_text = ""
+    for start in range(n):
+        for i in range(start, text_size, n):
+            decrypted_text += plaintext[i]
+    return decrypted_text
