@@ -11,20 +11,24 @@ def encrypt_caesar(plaintext: str, shift: int = 3) -> str:
     ''
     """
     ciphertext = ""
+    a_code = ord("a")
+    z_code = ord("z")
+    A_code = ord("A")
+    Z_code = ord("Z")
     for c in plaintext:
         if not c.isalpha():
             ciphertext += c
             continue
         if (
-            (ord("A") <= ord(c) + shift <= ord("Z") and ord("A") <= ord(c) <= ord("Z"))
-            or (ord("a") <= ord(c) + shift <= ord("z"))
-            and ord("a") <= ord(c) <= ord("z")
+            (A_code <= ord(c) + shift <= Z_code and A_code <= ord(c) <= Z_code)
+            or (a_code <= ord(c) + shift <= z_code)
+            and a_code <= ord(c) <= z_code
         ):
             ciphertext += chr(ord(c) + shift)
         elif c == c.upper():
-            ciphertext += chr(ord("A") + (ord(c) + shift) % ord("Z") - 1)
+            ciphertext += chr(A_code + (ord(c) + shift) % Z_code - 1)
         else:
-            ciphertext += chr(ord("a") + (ord(c) + shift) % ord("z") - 1)
+            ciphertext += chr(a_code + (ord(c) + shift) % z_code - 1)
 
     return ciphertext
 
@@ -42,19 +46,23 @@ def decrypt_caesar(ciphertext: str, shift: int = 3) -> str:
     ''
     """
     plaintext = ""
-    for c in ciphertext:
-        if not c.isalpha():
-            plaintext += c
+    a_code = ord("a")
+    z_code = ord("z")
+    A_code = ord("A")
+    Z_code = ord("Z")
+    for char in ciphertext:
+        if not char.isalpha():
+            plaintext += char
             continue
         if (
-            (ord("A") <= ord(c) - shift <= ord("Z") and ord("A") <= ord(c) <= ord("Z"))
-            or (ord("a") <= ord(c) - shift <= ord("z"))
-            and ord("a") <= ord(c) <= ord("z")
+            (A_code <= ord(char) - shift <= Z_code and A_code <= ord(char) <= Z_code)
+            or (a_code <= ord(char) - shift <= z_code)
+            and a_code <= ord(char) <= z_code
         ):
-            plaintext += chr(ord(c) - shift)
-        elif c == c.upper():
-            plaintext += chr(ord(c) + (ord("Z") - shift - ord("A") + 1) % 26)
+            plaintext += chr(ord(char) - shift)
+        elif char.isupper():
+            plaintext += chr(ord(char) + (Z_code - shift - A_code + 1) % 26)
         else:
-            plaintext += chr(ord(c) + (ord("z") - shift - ord("a") + 1) % 26)
+            plaintext += chr(ord(char) + (z_code - shift - a_code + 1) % 26)
 
     return plaintext
