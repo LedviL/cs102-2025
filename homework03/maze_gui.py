@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 from typing import List
 
-from maze import add_path_to_grid, bin_tree_maze, solve_maze
+from .maze import add_path_to_grid, bin_tree_maze, solve_maze
 
 
 def draw_cell(x, y, color, size: int = 10):
@@ -52,7 +52,7 @@ if __name__ == "__main__":
     canvas = tk.Canvas(window, width=M * CELL_SIZE, height=N * CELL_SIZE)
     canvas.pack()
 
-    draw_maze(GRID, CELL_SIZE)
+    draw_maze([list(map(str, row)) for row in GRID], CELL_SIZE)
     ttk.Button(window, text="Solve", command=show_solution).pack(pady=20)
 
     window.mainloop()

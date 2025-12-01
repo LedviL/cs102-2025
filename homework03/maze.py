@@ -118,37 +118,21 @@ def shortest_path(
     :param exit_coord:
     :return:
     """
-    x, y = exit_coord
-    current_dist = grid[x][y]
+    rows = len(grid)
+    cols = len(grid[0])
 
-    if current_dist == 1:
-        return [(x, y)]
-
-    while True:
-        path = [exit_coord]
-        if grid[x - 1][y] == current_dist - 1:
-            path.extend(shortest_path(grid, (x - 1, y)))
-            if len(path) != current_dist:
-                grid[x - 1][y] = " "
-            else:
-                break
-        elif grid[x + 1][y] == current_dist - 1:
-            path.extend(shortest_path(grid, (x + 1, y)))
-            if len(path) != current_dist:
-                grid[x + 1][y] = " "
-            else:
-                break
-        elif grid[x][y - 1] == current_dist - 1:
-            path.extend(shortest_path(grid, (x, y - 1)))
-            if len(path) != current_dist:
-                grid[x][y - 1] = " "
-            else:
-                break
-        elif grid[x][y + 1] == current_dist - 1:
-            path.extend(shortest_path(grid, (x, y + 1)))
-            if len(path) != current_dist:
-                grid[x][y + 1] = " "
-            else:
+    exit_x, exit_y = exit_coord
+    path_len = int(grid[exit_x][exit_y])
+    path = [(exit_x, exit_y)]
+    while grid[exit_x][exit_y] != 1:
+        path_len -= 1
+        if path_len < 1:
+            break
+        neighbors = [(exit_x, exit_y + 1), (exit_x, exit_y - 1), (exit_x + 1, exit_y), (exit_x - 1, exit_y)]
+        for x, y in neighbors:
+            if 0 <= x < rows and 0 <= y < cols and grid[x][y] == path_len:
+                path.append((x, y))
+                exit_x, exit_y = x, y
                 break
     return path
 
