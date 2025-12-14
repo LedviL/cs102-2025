@@ -124,7 +124,7 @@ class GameOfLife:
         Прочитать состояние клеток из указанного файла.
         """
         file = open(filename)
-        grid = [list(map(int, line)) for line in file.readlines()]
+        grid = [list(map(int, line.strip())) for line in file.readlines() if line != '\n']
         file.close()
 
         rows = len(grid)
