@@ -3,6 +3,8 @@ import curses
 from life import GameOfLife
 from ui import UI
 
+from time import sleep
+
 
 class Console(UI):
     def __init__(self, life: GameOfLife) -> None:
@@ -37,7 +39,8 @@ class Console(UI):
             y = r * 2 + 1
             for c in range(cols):
                 x = c * 2 + 1
-                screen.addstr(y, x, str(grid[r][c]))
+                alive = grid[r][c]
+                screen.addstr(y, x, 'O' if alive else ' ')
 
 
     def run(self) -> None:
@@ -48,7 +51,17 @@ class Console(UI):
 
         self.draw_borders(screen)
         self.draw_grid(screen)
-        screen.refresh()
-        screen.getch()
+        screen.nodelay(True)
+
+        while self.life.is_changing and self.life.is_max_generations_exceeded:
+            key = screen.getch()
+            if key == ord('q'):
+                break
+
+            self.draw_grid(screen)
+            self.life.step()
+            screen.refresh()
+
+            sleep(1)
 
         curses.endwin()
