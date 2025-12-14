@@ -10,13 +10,45 @@ class Console(UI):
 
     def draw_borders(self, screen) -> None:
         """ Отобразить рамку. """
-        pass
+        rows = self.life.rows
+        cols = self.life.cols
+
+        for r in range(rows+1):
+            y = r * 2
+            for c in range(cols):
+                x = c * 2
+                screen.addstr(y, x, '+')
+                screen.addstr(y, x+1, '-')
+            screen.addstr(y, cols * 2, '+')
+
+        for r in range(rows):
+            y = 2 * r + 1
+            for c in range(cols + 1):
+                x = c * 2
+                screen.addstr(y, x, "|")
 
     def draw_grid(self, screen) -> None:
         """ Отобразить состояние клеток. """
-        pass
+        grid = self.life.curr_generation
+        rows = self.life.rows
+        cols = self.life.cols
+
+        for r in range(rows):
+            y = r * 2 + 1
+            for c in range(cols):
+                x = c * 2 + 1
+                screen.addstr(y, x, str(grid[r][c]))
+
 
     def run(self) -> None:
         screen = curses.initscr()
-        # PUT YOUR CODE HERE
+
+        curses.curs_set(0)
+        screen.clear()
+
+        self.draw_borders(screen)
+        self.draw_grid(screen)
+        screen.refresh()
+        screen.getch()
+
         curses.endwin()
