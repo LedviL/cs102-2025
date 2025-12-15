@@ -42,22 +42,44 @@ class GUI(UI):
         clock = pygame.time.Clock()
         pygame.display.set_caption("Game of Life")
         self.screen.fill(pygame.Color("white"))
+        self.draw_lines()
 
         running = True
+        paused = False
         while running:
             for event in pygame.event.get():
                 if event.type == QUIT:
                     running = False
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        paused = not paused
+                if paused and event.type == pygame.MOUSEBUTTONDOWN:
+                    y, x = event.pos
+                    if event.button == 1:
+                        cell_x = x // self.cell_size
+                        cell_y = y // self.cell_size
+                        y = y // self.cell_size * self.cell_size
+                        x = x // self.cell_size * self.cell_size
+                        pygame.draw.rect(
+                            self.screen,
+                            pygame.Color("white" if self.life.curr_generation[cell_x][cell_y] else "green"),
+                            (y + 1, x + 1, self.cell_size - 1, self.cell_size - 1)
+                        )
+                        # 0 xor 1 = 1
+                        # 1 xor 1 = 0
+                        self.life.curr_generation[cell_x][cell_y] ^= 1
 
-            self.draw_lines()
-            self.draw_grid()
+                        pygame.display.flip()
+                        clock.tick(60)
 
-            # Выполнение одного шага игры (обновление состояния ячеек)
-            self.life.step()
 
-            pygame.display.flip()
-            clock.tick(self.speed)
+            if not paused:
+                self.draw_grid()
+
+                # Выполнение одного шага игры (обновление состояния ячеек)
+                self.life.step()
+
+                pygame.display.flip()
+                clock.tick(self.speed)
+
         pygame.quit()
-
-l = GUI(GameOfLife((48, 64)), 10, 5)
-l.run()
