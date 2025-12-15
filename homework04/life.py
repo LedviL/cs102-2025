@@ -2,8 +2,8 @@ import pathlib
 import random
 import typing as tp
 
-import pygame
-from pygame.locals import *
+# import pygame
+# from pygame.locals import *
 
 Cell = tp.Tuple[int, int]
 Cells = tp.List[int]
@@ -108,8 +108,7 @@ class GameOfLife:
         """
         if self.max_generations:
             return self.generations <= self.max_generations
-        else:
-            return False
+        return False
 
     @property
     def is_changing(self) -> bool:
@@ -123,9 +122,8 @@ class GameOfLife:
         """
         Прочитать состояние клеток из указанного файла.
         """
-        file = open(filename)
-        grid = [list(map(int, line.strip())) for line in file.readlines() if line != "\n"]
-        file.close()
+        with open(filename, encoding="utf-8") as file:
+            grid = [list(map(int, line.strip())) for line in file.readlines() if line != "\n"]
 
         rows = len(grid)
         cols = len(grid[0])
@@ -138,7 +136,6 @@ class GameOfLife:
         """
         Сохранить текущее состояние клеток в указанный файл.
         """
-        file = open(filename, "w")
-        for line in self.curr_generation:
-            print("".join(map(str, line)), file=file, sep="")
-        file.close()
+        with open(filename, "w", encoding="utf-8") as file:
+            for line in self.curr_generation:
+                print("".join(map(str, line)), file=file, sep="")

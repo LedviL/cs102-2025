@@ -91,9 +91,13 @@ class GameOfLife:
             for y in range(0, self.width, self.cell_size):
                 cell_x = x // self.cell_size
                 cell_y = y // self.cell_size
+                if self.grid[cell_x][cell_y]:
+                    color = pygame.Color("green")
+                else:
+                    color = pygame.Color("white")
                 pygame.draw.rect(
                     self.screen,
-                    pygame.Color("green" if self.grid[cell_x][cell_y] else "white"),
+                    color,
                     (y + 1, x + 1, self.cell_size - 1, self.cell_size - 1),
                 )
 
@@ -145,7 +149,3 @@ class GameOfLife:
                 elif not self.grid[x][y] and sum(neighbours) == 3:
                     new_grid[x][y] = 1
         return new_grid
-
-
-life = GameOfLife(640, 480)
-life.run()

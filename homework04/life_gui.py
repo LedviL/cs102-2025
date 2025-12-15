@@ -1,6 +1,4 @@
 import pygame
-from pygame.locals import *
-
 from life import GameOfLife
 from ui import UI
 
@@ -49,21 +47,25 @@ class GUI(UI):
         paused = False
         while running:
             for event in pygame.event.get():
-                if event.type == QUIT:
+                if event.type == pygame.constants.QUIT:
                     running = False
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
+                if event.type == pygame.constants.KEYDOWN:
+                    if event.key == pygame.constants.K_ESCAPE:
                         paused = not paused
-                if paused and event.type == pygame.MOUSEBUTTONDOWN:
+                if paused and event.type == pygame.constants.MOUSEBUTTONDOWN:
                     y, x = event.pos
                     if event.button == 1:
                         cell_x = x // self.cell_size
                         cell_y = y // self.cell_size
                         y = y // self.cell_size * self.cell_size
                         x = x // self.cell_size * self.cell_size
+                        if self.life.curr_generation[cell_x][cell_y]:
+                            color = pygame.Color("white")
+                        else:
+                            color = pygame.Color("green")
                         pygame.draw.rect(
                             self.screen,
-                            pygame.Color("white" if self.life.curr_generation[cell_x][cell_y] else "green"),
+                            color,
                             (y + 1, x + 1, self.cell_size - 1, self.cell_size - 1),
                         )
                         # 0 xor 1 = 1
