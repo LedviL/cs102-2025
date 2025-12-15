@@ -1,6 +1,7 @@
 import pygame
-from life import GameOfLife
 from pygame.locals import *
+
+from life import GameOfLife
 from ui import UI
 
 
@@ -16,7 +17,7 @@ class GUI(UI):
         super().__init__(life)
 
     def draw_lines(self) -> None:
-        """ Отрисовать сетку """
+        """Отрисовать сетку"""
         for x in range(0, self.width, self.cell_size):
             pygame.draw.line(self.screen, pygame.Color("black"), (x, 0), (x, self.height))
         for y in range(0, self.height, self.cell_size):
@@ -33,11 +34,11 @@ class GUI(UI):
                 pygame.draw.rect(
                     self.screen,
                     pygame.Color("green" if self.life.curr_generation[cell_x][cell_y] else "white"),
-                    (y + 1, x + 1, self.cell_size - 1, self.cell_size - 1)
+                    (y + 1, x + 1, self.cell_size - 1, self.cell_size - 1),
                 )
 
     def run(self) -> None:
-        """ Запустить игру """
+        """Запустить игру"""
         pygame.init()
         clock = pygame.time.Clock()
         pygame.display.set_caption("Game of Life")
@@ -63,7 +64,7 @@ class GUI(UI):
                         pygame.draw.rect(
                             self.screen,
                             pygame.Color("white" if self.life.curr_generation[cell_x][cell_y] else "green"),
-                            (y + 1, x + 1, self.cell_size - 1, self.cell_size - 1)
+                            (y + 1, x + 1, self.cell_size - 1, self.cell_size - 1),
                         )
                         # 0 xor 1 = 1
                         # 1 xor 1 = 0
@@ -71,7 +72,6 @@ class GUI(UI):
 
                         pygame.display.flip()
                         clock.tick(60)
-
 
             if not paused:
                 self.draw_grid()

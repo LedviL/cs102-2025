@@ -46,8 +46,7 @@ class GameOfLife:
         out : Grid
             Матрица клеток размером `cell_height` х `cell_width`.
         """
-        return [[random.choice([0, 1]) if randomize else 0 for _ in range(self.cols)] for _ in
-                range(self.rows)]
+        return [[random.choice([0, 1]) if randomize else 0 for _ in range(self.cols)] for _ in range(self.rows)]
 
     def get_neighbours(self, cell: Cell) -> Cells:
         """
@@ -71,9 +70,7 @@ class GameOfLife:
         neighbours = []
         for next_x in range(-1, 2):
             for next_y in range(-1, 2):
-                if (next_x != 0 or next_y != 0) and \
-                        0 <= x + next_x < self.rows and \
-                        0 <= y + next_y < self.cols:
+                if (next_x != 0 or next_y != 0) and 0 <= x + next_x < self.rows and 0 <= y + next_y < self.cols:
                     neighbours.append(self.curr_generation[x + next_x][y + next_y])
         return neighbours
 
@@ -109,7 +106,10 @@ class GameOfLife:
         """
         Не превысило ли текущее число поколений максимально допустимое.
         """
-        return self.generations <= self.max_generations
+        if self.max_generations:
+            return self.generations <= self.max_generations
+        else:
+            return False
 
     @property
     def is_changing(self) -> bool:
@@ -124,7 +124,7 @@ class GameOfLife:
         Прочитать состояние клеток из указанного файла.
         """
         file = open(filename)
-        grid = [list(map(int, line.strip())) for line in file.readlines() if line != '\n']
+        grid = [list(map(int, line.strip())) for line in file.readlines() if line != "\n"]
         file.close()
 
         rows = len(grid)
@@ -138,7 +138,7 @@ class GameOfLife:
         """
         Сохранить текущее состояние клеток в указанный файл.
         """
-        file = open(filename, 'w')
+        file = open(filename, "w")
         for line in self.curr_generation:
-            print(''.join(map(str, line)), file=file, sep='')
+            print("".join(map(str, line)), file=file, sep="")
         file.close()
